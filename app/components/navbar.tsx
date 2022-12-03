@@ -74,7 +74,7 @@ const WithSubnavigation: FC<PropsWithChildren> = (props) => {
           </Text> */}
           <Image 
             alt='' 
-             src={require('../../assets/images/BrandingLogo.png')} 
+             src={require('@/assets/images/BrandingLogo.png')} 
             />
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -86,7 +86,7 @@ const WithSubnavigation: FC<PropsWithChildren> = (props) => {
           <Button 
             size='small' 
             className={styles.walletButton}
-            leftIcon={<Image alt='' className={styles.iconimage} src={require('../../assets/images/wallet.png')} />}
+            leftIcon={<Image alt='' className={styles.iconimage} src={require('@/assets/images/wallet.png')} />}
           >
             <Tooltip label={
               <Text sx={{color: 'white', fontWeight: 600, letterSpacing: 2}} variant='caption'>
@@ -113,7 +113,7 @@ const WithSubnavigation: FC<PropsWithChildren> = (props) => {
             onClick={() => connectWallet("injected")}
             className={styles.walletButton}
             leftIcon={
-              <Image className={styles.iconimage} alt='' src={require('../../assets/images/metamask-icon.png')} />
+              <Image className={styles.iconimage} alt='' src={require('@/assets/images/metamask-icon.png')} />
             }
           >
             Connect Wallet
