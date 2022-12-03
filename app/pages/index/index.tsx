@@ -120,12 +120,12 @@ const Index = () => {
       </GridItem>
       <GridItem>
         {captcha || !captcha?.minting || !captcha?.loading  ? <Card className={styles.itemcontainer}>
-          <ReCAPTCHA
+          {!captcha?.linked ? <ReCAPTCHA
             ref={recaptchaRef}
             // size="invisible"
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
             onChange={onReCAPTCHAChange}
-          />
+          />: null}
           {captcha?.linked && !captcha?.minting ? <Button
             onClick={() => mint('captcha')}
           >Mint</Button>: captcha?.minting ? <Spinner />: null}
