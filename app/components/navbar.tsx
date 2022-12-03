@@ -21,7 +21,6 @@ import {
   CloseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  
 } from '@chakra-ui/icons';
 import { FC, PropsWithChildren } from 'react';
 import { useWeb3 } from '@3rdweb/hooks'
@@ -33,8 +32,6 @@ const WithSubnavigation: FC<PropsWithChildren> = (props) => {
   const { isOpen, onToggle } = useDisclosure();
 
   const { connectWallet, address } = useWeb3()
-  const re = useWeb3()
-  console.log(re)
   const startAndEnd = (str: string) => {
     if (str.length > 0) {
       return str.substr(0, 4) + '...' + str.substr(str.length-4, str.length);
@@ -69,12 +66,16 @@ const WithSubnavigation: FC<PropsWithChildren> = (props) => {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
+          {/* <Text
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}>
             ZERO PASS
-          </Text>
+          </Text> */}
+          <Image 
+            alt='' 
+             src={require('../../assets/images/BrandingLogo.png')} 
+            />
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
