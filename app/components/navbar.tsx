@@ -14,17 +14,34 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Tooltip,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
   CloseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  
 } from '@chakra-ui/icons';
 import { FC, PropsWithChildren } from 'react';
+import { useWeb3 } from '@3rdweb/hooks'
+import styles from './components.module.scss'
+import Image from 'next/image';
+
 
 const WithSubnavigation: FC<PropsWithChildren> = (props) => {
   const { isOpen, onToggle } = useDisclosure();
+
+  const { connectWallet, address } = useWeb3()
+  const re = useWeb3()
+  console.log(re)
+  const startAndEnd = (str: string) => {
+    if (str.length > 0) {
+      return str.substr(0, 4) + '...' + str.substr(str.length-4, str.length);
+    }
+    return str;
+  }
+  // console.log(acc)
 
   return (
     <Box>
@@ -63,7 +80,47 @@ const WithSubnavigation: FC<PropsWithChildren> = (props) => {
             <DesktopNav />
           </Flex>
         </Flex>
+        <Stack>
+        {address ?
+          <Button 
+            size='small' 
+            className={styles.walletButton}
+            leftIcon={<Image alt='' className={styles.iconimage} src={require('../../assets/images/wallet.png')} />}
+          >
+            <Tooltip label={
+              <Text sx={{color: 'white', fontWeight: 600, letterSpacing: 2}} variant='caption'>
+                {address}
+              </Text>
+            }>
+              <Text 
+                sx={{color: 'white', fontWeight: 600, letterSpacing: 2}} 
+                variant='caption'
+                onClick={async () => {
+                  if ("clipboard" in navigator) {
+                    await navigator.clipboard.writeText(address);
+                  } else {
+                    document.execCommand("copy", true, address);
+                  }
+                }}
+              >
+                {startAndEnd(address)}
+              </Text>
+            </Tooltip>
+          </Button>
+            :<Button 
+            size='small' 
+            onClick={() => connectWallet("injected")}
+            className={styles.walletButton}
+            leftIcon={
+              <Image className={styles.iconimage} alt='' src={require('../../assets/images/metamask-icon.png')} />
+            }
+          >
+            Connect Wallet
+          </Button>}
+        </Stack>
       </Flex>
+     
+      
 
       <Collapse in={isOpen} animateOpacity>
         <MobileNav />
