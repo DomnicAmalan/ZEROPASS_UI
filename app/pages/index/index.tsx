@@ -1,8 +1,11 @@
-import { Button, Card, CardBody, Grid, Text } from '@chakra-ui/react'
+import { Box, Button, Card, CardBody, Grid, Link, Text } from '@chakra-ui/react'
 import styles from './index.module.scss'
 import { useSession, signIn, signOut } from "next-auth/react";
 import ReCAPTCHA from "react-google-recaptcha";
 import React, { useEffect, useState } from 'react';
+import Axios from 'axios'
+import { useWeb3 } from '@3rdweb/hooks';
+import { useToast } from '@chakra-ui/react'
 
 const Index = () => {
   const { data: session } = useSession();
@@ -13,14 +16,16 @@ const Index = () => {
     recaptchaRef.current.execute();
   };
 
-  useEffect(() => {
-    // if(recaptchaRef.current) {
-    //   recaptchaRef.current.execute();
-    // }
-  }, [])
+  // useEffect(() => {
+  //   // if(recaptchaRef.current) {
+  //   //   recaptchaRef.current.execute();
+  //   // }
+  // }, [])
 
   const [captchaVerified, setCaptchaVerified] = useState<boolean>(false)
-  
+  const { connectWallet, address } = useWeb3()
+  const toast = useToast()
+
   const onReCAPTCHAChange = async(captchaCode: any) => {
     // If the reCAPTCHA code is null or undefined indicating that
     // the reCAPTCHA was expired then return early
@@ -55,6 +60,8 @@ const Index = () => {
     }
   }
 
+  const [minting, setMinting] = useState(false)
+
   return (
     <Grid className={styles.container}>
       {!captchaVerified ? <ReCAPTCHA
@@ -73,6 +80,32 @@ const Index = () => {
           </Button>
           <Button onClick={!captchaVerified ? handleSubmit: () => {}}>
             {!captchaVerified ? 'Verify Captcha': 'Captcha verified'}
+          </Button>
+          <Button disabled={minting} onClick={async () => {
+            try {
+              if (!minting) {
+                setMinting(true)
+                const {data} = await Axios.post('http://localhost:3001/mint', {address})
+                toast({
+                  position: 'bottom-left',
+                  render: () => (
+                    <Box color='white' p={3} bg='blue.500'>
+                      {data?.message}
+                      <Link href={data?.link} color='white' p={3} bg='blue.500'>
+                        here
+                      </Link>
+                    </Box>
+                  ),
+                })
+                setMinting(false)
+              }
+            } catch(e) {
+              console.log(e)
+              setMinting(false)
+            }
+            // console.log(data?.link)
+          }}>
+            {minting ? 'Loading...': 'Mint'}
           </Button>
         </CardBody>
       </Card>
