@@ -1,1 +1,1 @@
-export const server = 'http://localhost:3001'
+export const server = 'https://ec2-15-206-128-252.ap-south-1.compute.amazonaws.com'
